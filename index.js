@@ -68,8 +68,8 @@ function adicionarEndereco() {
     }
 
     //verificar se aquele CEP já está cadastrado
-    for(endereco of listaEnderecos){
-        if(endereco.cep === inputCep.value.trim() && endereco.numero === inputNumero.value.trim()){
+    for (endereco of listaEnderecos) {
+        if (endereco.cep === inputCep.value.trim() && endereco.numero === inputNumero.value.trim()) {
             alert("Esse endereço já está cadastrado!");
             return;
         }
@@ -79,6 +79,7 @@ function adicionarEndereco() {
     const novoCEP = {
         cep: inputCep.value.trim(),
         estado: inputEstado.value.trim(),
+        cidade: inputCidade.value.trim(),
         bairro: inputBairro.value.trim(),
         rua: inputRua.value.trim(),
         numero: inputNumero.value.trim()
@@ -88,33 +89,58 @@ function adicionarEndereco() {
     //adicionando o CEP na minha lista
     listaEnderecos.push(novoCEP);
     salvarCep();
+    carregarCepsNaTela(novoCEP.cep, novoCEP.estado, novoCEP.cidade ,novoCEP.bairro, novoCEP.rua, novoCEP.numero);
 }
 
-function salvarCep(){
+function salvarCep() {
     localStorage.setItem('listaCep', JSON.stringify(listaEnderecos));
 }
 
-function carregarCeps(){
+function carregarCeps() {
     const armazenamento = localStorage.getItem('listaCep');
 
     //precisa ser JSON.parse, se não n pega
     listaEnderecos = armazenamento ? JSON.parse(armazenamento) : [];
 
-    for(endereco of listaEnderecos){
-        carregarCepsNaTela(endereco.cep, endereco.estado, endereco.bairro, endereco.rua, endereco.numero);
+    for (endereco of listaEnderecos) {
+        carregarCepsNaTela(endereco.cep, endereco.estado, endereco.cidade, endereco.bairro, endereco.rua, endereco.numero);
     }
 }
 
-function carregarCepsNaTela(cep, estado, bairro, rua, numero){
+function carregarCepsNaTela(cep, estado, cidade, bairro, rua, numero) {
 
     //criando a nova linha
     const novaLinha = document.createElement('tr');
-    
+
     //criando colunas
     const colunaCep = document.createElement('td');
+    const colunaEstado = document.createElement('td');
+    const colunaCidade = document.createElement('td');
+    const colunaBairro = document.createElement('td');
+    const colunaRua = document.createElement('td');
+    const colunaNumero = document.createElement('td');
+
+    //vinculando dados
+    colunaCep.innerText = cep;
+    colunaEstado.innerText = estado;
+    colunaCidade.innerText = cidade;
+    colunaBairro.innerText = bairro;
+    colunaRua.innerText = rua;
+    colunaNumero.innerText = numero;
+
+    //adicionando colunas a nova linha
+    novaLinha.appendChild(colunaCep);
+    novaLinha.appendChild(colunaEstado);
+    novaLinha.appendChild(colunaCidade);
+    novaLinha.appendChild(colunaBairro);
+    novaLinha.appendChild(colunaRua);
+    novaLinha.appendChild(colunaNumero);
 
     //puxando a tabela
     const tabelaEndereco = document.getElementById('tabela_endereco');
+
+    //vinculando a nova linha com a tabela
+    tabelaEndereco.appendChild(novaLinha);
 
 }
 
